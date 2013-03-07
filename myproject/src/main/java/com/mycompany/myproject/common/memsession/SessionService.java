@@ -1,18 +1,18 @@
 package com.mycompany.myproject.common.memsession;
 
-import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Properties;
 
-import com.danga.MemCached.MemCachedClient;
-import com.danga.MemCached.SockIOPool;
+import javax.annotation.Resource;
+
+import org.springside.modules.cache.memcached.SpyMemcachedClient;
 
 public class SessionService {
 
 	private static SessionService instance = null;
 
-	private SockIOPool pool = null;
+	@Resource
+	private SpyMemcachedClient spyMemcachedClient;
 
 	private String poolName = "sidsock";
 
@@ -24,66 +24,26 @@ public class SessionService {
 	}
 
 	private SessionService() {
-		ClassLoader cl = Thread.currentThread().getContextClassLoader();
-		InputStream infile = cl.getResourceAsStream("memcached.properties");
-		Properties props = new Properties();
-		String serverlist = "127.0.0.1:11211";
-		try {
-			props.load(infile);
-			serverlist = props.getProperty("serverlist", "127.0.0.1:11211");
-			poolName = props.getProperty("poolname", "sidsock");
-
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-
-		String[] servers = serverlist.split(",");
-		pool = SockIOPool.getInstance(poolName);
-		pool.setServers(servers);
-		pool.setFailover(true);
-		pool.setInitConn(10);
-		pool.setMinConn(5);
-		pool.setMaxConn(250);
-		pool.setMaintSleep(30);
-		pool.setNagle(false);
-		pool.setSocketTO(3000);
-		pool.setAliveCheck(true);
-		pool.initialize();
+		
 	}
 
 	public Map getSession(String id) {
-		MemCachedClient mc = this.getMemCachedClient();
 
-		Map session = (Map) mc.get(id);
+		Map session = (Map) spyMemcachedClient.get(id);
 		if (session == null) {
 			session = new HashMap();
-			mc.add(id, session);
+			spyMemcachedClient.safeSet(id, 1000000, session);
 		}
 		return session;
 	}
 
 	public void saveSession(String id, Map session) {
-		MemCachedClient mc = this.getMemCachedClient();
-		mc.replace(id, session);
+		spyMemcachedClient.safeSet(id, 1000000, session);
 	}
 
 	public void removeSession(String id) {
-		MemCachedClient mc = this.getMemCachedClient();
-		mc.delete(id);
+		spyMemcachedClient.delete(id);
 	}
 
-	private MemCachedClient getMemCachedClient() {
-		MemCachedClient mc = new MemCachedClient();
-		mc.setPoolName(poolName);
-		mc.setCompressEnable(false);
-		mc.setCompressThreshold(0);
-		return mc;
-	}
-
-	protected void finalize() {
-		if (this.pool != null) {
-			this.pool.shutDown();
-		}
-	}
 
 }
