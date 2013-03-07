@@ -14,7 +14,6 @@ public class SessionService {
 	@Resource
 	private SpyMemcachedClient spyMemcachedClient;
 
-	private String poolName = "sidsock";
 
 	public static synchronized SessionService getInstance() {
 		if (instance == null) {
@@ -27,6 +26,7 @@ public class SessionService {
 		
 	}
 
+	@SuppressWarnings("rawtypes")
 	public Map getSession(String id) {
 
 		Map session = (Map) spyMemcachedClient.get(id);
@@ -37,6 +37,7 @@ public class SessionService {
 		return session;
 	}
 
+	@SuppressWarnings("rawtypes")
 	public void saveSession(String id, Map session) {
 		spyMemcachedClient.safeSet(id, 1000000, session);
 	}
