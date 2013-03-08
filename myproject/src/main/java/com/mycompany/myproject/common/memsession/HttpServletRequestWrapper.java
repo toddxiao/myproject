@@ -8,17 +8,19 @@ public class HttpServletRequestWrapper extends
 
 	String sid = "";
 
-	public HttpServletRequestWrapper(String sid, HttpServletRequest arg0) {
-		super(arg0);
+	public HttpServletRequestWrapper(String sid, HttpServletRequest request) {
+		super(request);
 		this.sid = sid;
 	}
 
 	public HttpSession getSession(boolean create) {
-		return new HttpSessionSidWrapper(this.sid, super.getSession(create));
+	    HttpSession session = super.getSession(create);
+		return session==null?null:new HttpSessionSidWrapper(this.sid, session);
 	}
 
 	public HttpSession getSession() {
-		return new HttpSessionSidWrapper(this.sid, super.getSession());
+	    HttpSession session = super.getSession();
+	    return session==null?null:new HttpSessionSidWrapper(this.sid, session);
 	}
 
 }

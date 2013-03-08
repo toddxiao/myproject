@@ -3,15 +3,14 @@ package com.mycompany.myproject.common.memsession;
 import java.util.HashMap;
 import java.util.Map;
 
-import javax.annotation.Resource;
-
 import org.springside.modules.cache.memcached.SpyMemcachedClient;
+
+import com.mycompany.myproject.common.context.SpringContextHolder;
 
 public class SessionService {
 
 	private static SessionService instance = null;
 
-	@Resource
 	private SpyMemcachedClient spyMemcachedClient;
 
 
@@ -23,7 +22,7 @@ public class SessionService {
 	}
 
 	private SessionService() {
-		
+	    spyMemcachedClient = SpringContextHolder.getBean("spyMemcachedClient");
 	}
 
 	@SuppressWarnings("rawtypes")
@@ -32,14 +31,14 @@ public class SessionService {
 		Map session = (Map) spyMemcachedClient.get(id);
 		if (session == null) {
 			session = new HashMap();
-			spyMemcachedClient.safeSet(id, 1000000, session);
+			spyMemcachedClient.set(id, 1000*60, session);
 		}
 		return session;
 	}
 
 	@SuppressWarnings("rawtypes")
 	public void saveSession(String id, Map session) {
-		spyMemcachedClient.safeSet(id, 1000000, session);
+		spyMemcachedClient.set(id, 1000*60, session);
 	}
 
 	public void removeSession(String id) {
