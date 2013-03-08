@@ -22,8 +22,8 @@ public class HttpSessionWrapper implements HttpSession {
 		this.session = session;
 	}
 
-	public Object getAttribute(String arg0) {
-		return this.session.getAttribute(arg0);
+	public Object getAttribute(String name) {
+		return this.session.getAttribute(name);
 	}
 
 	public Enumeration<?> getAttributeNames() {
@@ -56,8 +56,8 @@ public class HttpSessionWrapper implements HttpSession {
 	}
 
 	@Deprecated
-    public Object getValue(String arg0) {
-		return session.getValue(arg0);
+    public Object getValue(String name) {
+		return session.getValue(name);
 	}
 
     @Deprecated
@@ -74,25 +74,25 @@ public class HttpSessionWrapper implements HttpSession {
 	}
 
 	@Deprecated
-    public void putValue(String arg0, Object arg1) {
-		session.putValue(arg0, arg1);
+    public void putValue(String name, Object value) {
+		session.putValue(name, value);
 	}
 
-	public void removeAttribute(String arg0) {
-		this.session.removeAttribute(arg0);
+	public void removeAttribute(String name) {
+		this.session.removeAttribute(name);
 	}
 
 	@Deprecated
-    public void removeValue(String arg0) {
-		session.removeValue(arg0);
+    public void removeValue(String name) {
+		session.removeValue(name);
 	}
 
-	public void setAttribute(String arg0, Object arg1) {
-		this.session.setAttribute(arg0, arg1);
+	public void setAttribute(String name, Object value) {
+		this.session.setAttribute(name, value);
 	}
 
-	public void setMaxInactiveInterval(int arg0) {
-		session.setMaxInactiveInterval(arg0);
+	public void setMaxInactiveInterval(int interval) {
+		session.setMaxInactiveInterval(interval);
 	}
 
 }

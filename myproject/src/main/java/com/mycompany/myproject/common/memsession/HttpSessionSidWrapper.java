@@ -27,8 +27,8 @@ public class HttpSessionSidWrapper extends HttpSessionWrapper {
         this.map = SessionService.getInstance().getSession(sid);
     }
 
-    public Object getAttribute(String arg0) {
-        return this.map.get(arg0);
+    public Object getAttribute(String name) {
+        return this.map.get(name);
     }
 
     public Enumeration<?> getAttributeNames() {
@@ -45,13 +45,13 @@ public class HttpSessionSidWrapper extends HttpSessionWrapper {
         SessionService.getInstance().removeSession(this.sid);
     }
 
-    public void removeAttribute(String arg0) {
-        this.map.remove(arg0);
+    public void removeAttribute(String name) {
+        this.map.remove(name);
         SessionService.getInstance().saveSession(this.sid, this.map);
     }
 
-    public void setAttribute(String arg0, Object arg1) {
-        this.map.put(arg0, arg1);
+    public void setAttribute(String name, Object value) {
+        this.map.put(name, value);
         SessionService.getInstance().saveSession(this.sid, this.map);
     }
 }
