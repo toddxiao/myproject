@@ -6,6 +6,13 @@ import javax.servlet.ServletContext;
 import javax.servlet.http.HttpSession;
 import javax.servlet.http.HttpSessionContext;
 
+/** 
+* @ClassName: HttpSessionWrapper 
+* @Description: TODO 
+* @author 肖聘  xiaopin@yhiker.com
+* @date 2013-3-8 下午1:24:54 
+*  
+*/ 
 @SuppressWarnings("deprecation")
 public class HttpSessionWrapper implements HttpSession {
 
@@ -43,14 +50,17 @@ public class HttpSessionWrapper implements HttpSession {
 		return session.getServletContext();
 	}
 
+	@Deprecated
     public HttpSessionContext getSessionContext() {
 		return session.getSessionContext();
 	}
 
+	@Deprecated
     public Object getValue(String arg0) {
 		return session.getValue(arg0);
 	}
 
+    @Deprecated
     public String[] getValueNames() {
 		return session.getValueNames();
 	}
@@ -63,6 +73,7 @@ public class HttpSessionWrapper implements HttpSession {
 		return session.isNew();
 	}
 
+	@Deprecated
     public void putValue(String arg0, Object arg1) {
 		session.putValue(arg0, arg1);
 	}
@@ -71,6 +82,7 @@ public class HttpSessionWrapper implements HttpSession {
 		this.session.removeAttribute(arg0);
 	}
 
+	@Deprecated
     public void removeValue(String arg0) {
 		session.removeValue(arg0);
 	}

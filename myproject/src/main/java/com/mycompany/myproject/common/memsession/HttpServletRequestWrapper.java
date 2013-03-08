@@ -3,6 +3,13 @@ package com.mycompany.myproject.common.memsession;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+/** 
+* @ClassName: HttpServletRequestWrapper 
+* @Description: TODO 
+* @author 肖聘  xiaopin@yhiker.com
+* @date 2013-3-8 下午1:24:31 
+*  
+*/ 
 public class HttpServletRequestWrapper extends
 		javax.servlet.http.HttpServletRequestWrapper {
 

@@ -7,43 +7,43 @@ import org.springside.modules.cache.memcached.SpyMemcachedClient;
 
 import com.mycompany.myproject.common.context.SpringContextHolder;
 
+/** 
+* @ClassName: SessionService 
+* @Description: TODO 
+* @author 肖聘  xiaopin@yhiker.com
+* @date 2013-3-8 下午1:25:02 
+*  
+*/ 
 public class SessionService {
 
-	private static SessionService instance = null;
+    private static SessionService instance = new SessionService();
 
-	private SpyMemcachedClient spyMemcachedClient;
+    private SpyMemcachedClient spyMemcachedClient;
 
+    public static synchronized SessionService getInstance() {
+        return instance;
+    }
 
-	public static synchronized SessionService getInstance() {
-		if (instance == null) {
-			instance = new SessionService();
-		}
-		return instance;
-	}
+    private SessionService() {
+        spyMemcachedClient = SpringContextHolder.getBean("spyMemcachedClient");
+    }
 
-	private SessionService() {
-	    spyMemcachedClient = SpringContextHolder.getBean("spyMemcachedClient");
-	}
+    public Map<String, Object> getSession(String id) {
 
-	@SuppressWarnings("rawtypes")
-	public Map getSession(String id) {
+        Map<String, Object> session = spyMemcachedClient.get(id);
+        if (session == null) {
+            session = new HashMap<String, Object>();
+            spyMemcachedClient.set(id, 1000 * 60, session);
+        }
+        return session;
+    }
 
-		Map session = (Map) spyMemcachedClient.get(id);
-		if (session == null) {
-			session = new HashMap();
-			spyMemcachedClient.set(id, 1000*60, session);
-		}
-		return session;
-	}
+    public void saveSession(String id, Map<String, Object> session) {
+        spyMemcachedClient.set(id, 1000 * 60, session);
+    }
 
-	@SuppressWarnings("rawtypes")
-	public void saveSession(String id, Map session) {
-		spyMemcachedClient.set(id, 1000*60, session);
-	}
-
-	public void removeSession(String id) {
-		spyMemcachedClient.delete(id);
-	}
-
+    public void removeSession(String id) {
+        spyMemcachedClient.delete(id);
+    }
 
 }

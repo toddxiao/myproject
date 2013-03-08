@@ -12,14 +12,15 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+/** 
+* @ClassName: MemcachedSessionFilter 
+* @Description: TODO 
+* @author 肖聘  xiaopin@yhiker.com
+* @date 2013-3-8 下午1:24:05 
+*  
+*/ 
 public class MemcachedSessionFilter extends HttpServlet implements Filter {
-
-	/**
-	 *
-	 */
 	private static final long serialVersionUID = -365105405910803550L;
-
-	// private FilterConfig filterConfig;
 
 	private String sessionId = "sid";
 
@@ -62,7 +63,6 @@ public class MemcachedSessionFilter extends HttpServlet implements Filter {
 	}
 
 	public void init(FilterConfig filterConfig) throws ServletException {
-		// this.filterConfig = filterConfig;
 		this.sessionId = filterConfig.getInitParameter("sessionId");
 		this.cookieDomain = filterConfig.getInitParameter("cookieDomain");
 		if (this.cookieDomain == null) {
